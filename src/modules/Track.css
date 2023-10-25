@@ -1,0 +1,16 @@
+.track,
+.playlist-track {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-button,
+.remove-button {
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}

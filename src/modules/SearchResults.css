@@ -1,0 +1,29 @@
+.SearchResults {
+    grid-column: 1;
+    /* Place it in the first column */
+    background-color: rgba(75, 51, 75, 0.8);
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(100vh - 100px);
+    border-radius: 15px;
+    margin-right: 10px;
+}
+
+.SearchResults ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.SearchResults li {
+    padding: 10px;
+    border-top: 1px solid #9E7A9E;
+    /* Contrast color for border */
+    border-bottom: 1px solid #9E7A9E;
+}
+
+/* Forward and back buttons */
+.pagination-buttons {
+    display: flex;
+    justify-content: space-between;
+}

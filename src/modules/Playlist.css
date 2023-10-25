@@ -1,0 +1,44 @@
+.Playlist {
+    grid-column: 2;
+    /* Place it in the second column */
+    background-color: rgba(75, 51, 75, 0.8);
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(100vh - 100px);
+    border-radius: 15px;
+    margin-right: 40px;
+}
+
+.Playlist ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.Playlist li {
+    padding: 10px;
+    border-top: 1px solid #9E7A9E;
+    /* Contrast color for border */
+    border-bottom: 1px solid #9E7A9E;
+}
+
+.Playlist input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.complete-button {
+    background-color: #444;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.complete-button:hover {
+    background-color: #555;
+}
