@@ -1,5 +1,6 @@
 import React from 'react';
 import './SearchResults.css';
+import '../styles.css';
 import Track from './Track';
 
 function SearchResults({ results, onAdd, onNewSearch, offset, setOffset }) {  // Added setOffset here
@@ -21,8 +22,8 @@ function SearchResults({ results, onAdd, onNewSearch, offset, setOffset }) {  //
         ))}
       </ul>
       <div className="pagination-buttons">
-        <button onClick={handleBack} disabled={offset === 0}>Back</button>
-        <button onClick={handleForward}>Forward</button>
+        <button className="reusable-button" onClick={handleBack} disabled={offset === 0}>Back</button>
+        <button className="reusable-button" onClick={handleForward}>Forward</button>
       </div>
     </div>
   );

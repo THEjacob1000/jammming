@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from './Logo.png';
 import './App.css';
+import './styles.css';
 import SearchBar from './modules/SearchBar';
 import SearchResults from './modules/SearchResults';
 import Playlist from './modules/Playlist';
@@ -34,11 +35,20 @@ function App() {
     const newResults = await SpotifyHandleSearch(searchTerm, searchType, accessToken, offset);
     setSearchResults(newResults);
   };
-
   const handleNewSearch = async (searchType, id) => {
     const newResults = await SpotifyIdSearch(id, searchType, accessToken, offset);
     setSearchResults(newResults);
   };
+  const onAdd = (track) => {
+    setSelectedTracks([...selectedTracks, track]);
+  };
+  const onRemove = (track) => {
+    const newSelectedTracks = selectedTracks.filter(
+      selectedTrack => selectedTrack.songId !== track.songId
+    );
+    setSelectedTracks(newSelectedTracks);
+  };
+
   useEffect(() => {
     console.log("searchResults updated:", searchResults);
   }, [searchResults]);
@@ -47,6 +57,7 @@ function App() {
       handleSearch(lastSearchTerm, lastSearchType);
     }
   }, [offset]);
+  
 
   return (
     <div className="App">
@@ -58,9 +69,9 @@ function App() {
           <SearchBar onSearch={handleSearch} access={accessToken} />
           <div className="content">
             {searchResults.length > 0 && (
-              <SearchResults results={searchResults} onAdd={() => {}} onNewSearch={handleNewSearch} offset={offset} setOffset={setOffset} />  // Passed setOffset here
+              <SearchResults results={searchResults} onAdd={onAdd} onNewSearch={handleNewSearch} offset={offset} setOffset={setOffset} />  // Passed setOffset here
             )}
-            <Playlist selectedTracks={selectedTracks} onRemove={() => {}} />
+            <Playlist selectedTracks={selectedTracks} onRemove={onRemove} />
           </div>
         </>
       ) : (

@@ -1,5 +1,6 @@
 import React from 'react';
 import './Track.css';
+import '../styles.css';
 
 function Track({ track, onAdd, type, onNewSearch }) {
     const handleClick = () => {
@@ -16,7 +17,7 @@ function Track({ track, onAdd, type, onNewSearch }) {
           Song: {track.name}<br />
           Album: {track.album}<br />
           {track.artist.includes(', ') ? "Artists" : "Artist"}: {track.artist}
-          <button className="add-button" onClick={handleClick}>+</button>
+          <button className="reusable-button" onClick={() => onAdd(track)}>Add</button>
         </li>
       );
     } else if (type==='artist') {

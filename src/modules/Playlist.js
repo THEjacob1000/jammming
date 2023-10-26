@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Playlist.css';
+import '../styles.css';
 
 function Playlist({ selectedTracks, onRemove }) {
   const [playlistName, setPlaylistName] = useState('New Playlist');
@@ -28,11 +29,11 @@ function Playlist({ selectedTracks, onRemove }) {
             Song: {track.name}<br />
             Artist: {track.artist}<br />
             Album: {track.album}
-            <button className="remove-button" onClick={() => onRemove(track)}>x</button>
+            <button className="reusable-button" onClick={() => onRemove(track)}>Remove</button>
           </li>
         ))}
       </ul>
-      <button className="complete-button" onClick={handleCompleteClick}>
+      <button className="reusable-button" onClick={handleCompleteClick}>
         Complete Playlist
       </button>
     </div>
