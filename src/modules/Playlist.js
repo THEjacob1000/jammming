@@ -16,7 +16,7 @@ function Playlist({ selectedTracks, onRemove, createPlaylist }) {
 
   return (
     <div className="Playlist">
-      <h2>Playlist</h2>
+      <h2 data-testid="playlist-header">Playlist</h2>
       <input 
         type="text" 
         value={playlistName} 
