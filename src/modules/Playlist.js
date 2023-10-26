@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Playlist.css';
 import '../styles.css';
 
-function Playlist({ selectedTracks, onRemove }) {
+function Playlist({ selectedTracks, onRemove, createPlaylist }) {
   const [playlistName, setPlaylistName] = useState('New Playlist');
 
   const handleNameChange = (e) => {
@@ -10,7 +10,7 @@ function Playlist({ selectedTracks, onRemove }) {
   };
 
   const handleCompleteClick = () => {
-    // Logic to handle playlist completion (e.g., save to Spotify)
+    createPlaylist(playlistName);
     console.log("Playlist completed");
   };
 

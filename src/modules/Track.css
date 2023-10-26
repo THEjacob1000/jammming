@@ -14,3 +14,38 @@
     height: 20px;
     cursor: pointer;
 }
+
+.track {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.track img {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+    border-radius: 4px;
+}
+
+.track-name-large {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.track-album-small {
+    font-size: 0.8em;
+    color: grey;
+}
+
+.track-artist-medium {
+    font-size: 1.2em;
+}
+
+.track div {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

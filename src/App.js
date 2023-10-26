@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import logo from './Logo.png';
+import header from './Jammming.png'
 import './App.css';
 import './styles.css';
 import SearchBar from './modules/SearchBar';
 import SearchResults from './modules/SearchResults';
 import Playlist from './modules/Playlist';
-import { authorize, handleAuthorization, handleSearch as SpotifyHandleSearch, idSearch as SpotifyIdSearch } from './modules/Spotify';
+import { authorize, handleAuthorization, handleSearch as SpotifyHandleSearch, idSearch as SpotifyIdSearch, createPlaylist } from './modules/Spotify';
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
@@ -48,21 +49,28 @@ function App() {
     );
     setSelectedTracks(newSelectedTracks);
   };
+  const createNewPlaylist = async (name) => {
+    const playlist = await createPlaylist(name, selectedTracks, accessToken);
+    console.log(playlist);
+  }
 
   useEffect(() => {
     console.log("searchResults updated:", searchResults);
   }, [searchResults]);
+  
   useEffect(() => {
     if (lastSearchTerm && lastSearchType) {
       handleSearch(lastSearchTerm, lastSearchType);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset]);
   
 
   return (
     <div className="App">
       <header className="App-header">
-        <img className='App-logo' src={logo} alt="Logo" />
+        <img className='App-logo' src={logo} alt="Logo" /><br />
+        <img className="Jammming" src={header} alt="header" />
       </header>
       {loggedIn ? (
         <>
@@ -71,7 +79,7 @@ function App() {
             {searchResults.length > 0 && (
               <SearchResults results={searchResults} onAdd={onAdd} onNewSearch={handleNewSearch} offset={offset} setOffset={setOffset} />  // Passed setOffset here
             )}
-            <Playlist selectedTracks={selectedTracks} onRemove={onRemove} />
+            <Playlist selectedTracks={selectedTracks} onRemove={onRemove} createPlaylist={createNewPlaylist} />
           </div>
         </>
       ) : (

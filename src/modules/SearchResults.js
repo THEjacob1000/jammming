@@ -6,11 +6,11 @@ import Track from './Track';
 function SearchResults({ results, onAdd, onNewSearch, offset, setOffset }) {  // Added setOffset here
   
   const handleForward = () => {
-    setOffset(prevOffset => prevOffset + 10);  // Increment offset
+    setOffset(prevOffset => prevOffset + 5);  // Increment offset
   }
 
   const handleBack = () => {
-    setOffset(prevOffset => Math.max(prevOffset - 10, 0));  // Decrement offset
+    setOffset(prevOffset => Math.max(prevOffset - 5, 0));  // Decrement offset
   }
   
   return (

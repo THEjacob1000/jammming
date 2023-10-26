@@ -11,9 +11,10 @@ export const generateRandomString = (length) => {
 export const authorize = (client_id, redirect_uri) => {
     const state = generateRandomString(16);
     localStorage.setItem('spotify_auth_state', state); // Save state to localStorage
-    const url = `https://accounts.spotify.com/authorize?response_type=token&client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&state=${encodeURIComponent(state)}`;
+    const scope = 'playlist-modify-public playlist-modify-private'; // Add scopes here
+    const url = `https://accounts.spotify.com/authorize?response_type=token&client_id=${client_id}&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(redirect_uri)}&state=${encodeURIComponent(state)}`;
     window.location.href = url;
-};
+  };
 
 export const handleAuthorization = (savedState, setAccessToken, setLoggedIn) => {
     const hash = window.location.hash
@@ -46,7 +47,7 @@ export const handleSearch = async (search, searchType, accessToken, offset) => {
     const headers = {
         'Authorization': `Bearer ${accessToken}`
     };
-    const response = await fetch(`https://api.spotify.com/v1/search?q=${searchFormatted}&type=${searchType}&market=AU&limit=10&offset=${offset}`, { headers });
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${searchFormatted}&type=${searchType}&market=AU&limit=5&offset=${offset}`, { headers });
     console.log("Fetch response: ", response);  // Debugging line
 
     if (response.ok) {
@@ -62,7 +63,8 @@ export const handleSearch = async (search, searchType, accessToken, offset) => {
                     name: result[i].name,
                     album: result[i].album.name,
                     artist: artists,
-                    songId: result[i].id
+                    songId: result[i].id,
+                    img: result[i].album.images[2].url
                 });
             }
         } else if (searchType === 'artist') {
@@ -70,7 +72,8 @@ export const handleSearch = async (search, searchType, accessToken, offset) => {
             for (let i = 0; i < result.length; i++) {
                 resultArray.push({
                     name: result[i].name,
-                    artistId: result[i].id
+                    artistId: result[i].id,
+                    img: result[i].images[2].url
                 });
             }
         } else {
@@ -80,7 +83,8 @@ export const handleSearch = async (search, searchType, accessToken, offset) => {
                 resultArray.push({
                     name: result[i].name,
                     artist: artists,
-                    albumId: result[i].id
+                    albumId: result[i].id,
+                    img: result[i].images[2].url
                 });
             }
         }
@@ -108,13 +112,14 @@ export const idSearch = async (id, searchType, accessToken, offset) => {
             const result = jsonResponse.tracks;
             // Check if result and result.length are defined
             if (result && result.length) {
-                for (let i = 0; i < result.length; i++) {
+                for (let i = 0; i < result.length && i < 6; i++) {
                     const artists = result[i].artists.map(artist => artist.name).join(', ');
                     resultArray.push({
                         name: result[i].name,
                         album: result[i].album.name,
                         artist: artists,
-                        songId: result[i].id
+                        songId: result[i].id,
+                        img: result[i].album.images[2].url
                     });
                 }
             }
@@ -124,7 +129,7 @@ export const idSearch = async (id, searchType, accessToken, offset) => {
 
         // Handle 'album' search type
     } else if (searchType === 'album') {
-        const response = await fetch(`https://api.spotify.com/v1/albums/${id}/tracks?market=AU&limit=10&offset=${offset}`, { headers });
+        const response = await fetch(`https://api.spotify.com/v1/albums/${id}/tracks?market=AU&limit=5&offset=${offset}`, { headers });
         if (response.ok) {
             const jsonResponse = await response.json();
             const result = jsonResponse.items;
@@ -136,7 +141,8 @@ export const idSearch = async (id, searchType, accessToken, offset) => {
                         name: result[i].name,
                         album: result[i].album.name,
                         artist: artists,
-                        songId: result[i].id
+                        songId: result[i].id,
+                        img: result[i].album.images[2].url
                     });
                 }
             }
@@ -147,4 +153,46 @@ export const idSearch = async (id, searchType, accessToken, offset) => {
     console.log(resultArray);
     console.log(Array.isArray(resultArray))
     return [resultArray, 'track'];
+};
+
+export const createPlaylist = async (name, items, accessToken) => {
+    const headers = {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+    };
+
+    // Getting the current user's ID
+    const userDataResponse = await fetch(`https://api.spotify.com/v1/me`, { headers });
+    const userData = await userDataResponse.json();
+    const userID = userData.id;
+
+    // Creating the Playlist
+    const requestOptions = {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ name })
+    };
+
+    const playlistResponse = await fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, requestOptions);
+    const playlistData = await playlistResponse.json();
+    const playlistId = playlistData.id;
+    console.log('UserID:', userID);
+    console.log('PlaylistData:', playlistData);
+    console.log('Request Options:', requestOptions);
+
+
+    // Updating the playlist to include the items
+    const uris = items.map(item => `spotify:track:${item.songId}`);
+
+    const itemRequestOptions = {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ uris })
+    };
+
+    const addTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, itemRequestOptions);
+    const addTracksData = await addTracksResponse.json();
+
+    console.log(addTracksData);
+    return addTracksData;
 };

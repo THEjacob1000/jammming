@@ -22,7 +22,11 @@
 }
 
 .App-logo {
-    height: 6rem;
+    width: 60px;
+    height: 60px;
+    object-position: center;
+    overflow: hidden;
+    margin-top: 20px;
 }
 
 body {
@@ -45,4 +49,9 @@ button {
 button:hover {
     background-color: #1ed760;
     /* Lighter green on hover */
+}
+
+.Jammming {
+    height: 40px;
+    margin-bottom: 20px;
 }
