@@ -5,8 +5,10 @@
 .content {
     margin-top: 15px;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Two equally wide columns */
-    gap: 20px;  /* Adds a gap between the items */
+    grid-template-columns: 1fr 1fr;
+    /* Two equally wide columns */
+    gap: 20px;
+    /* Adds a gap between the items */
     padding: 20px;
     width: 100%;
 }
@@ -27,3 +29,20 @@ body {
     background-color: #885C87;
 }
 
+button {
+    background-color: #1DB954;
+    /* Spotify green */
+    color: white;
+    padding: 10px 20px;
+    margin: 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #1ed760;
+    /* Lighter green on hover */
+}

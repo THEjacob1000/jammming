@@ -1,30 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './SearchResults.css';
 import Track from './Track';
 
-function SearchResults({ results, onAdd }) {  // Added onAdd here
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+function SearchResults({ results, onAdd, onNewSearch, offset, setOffset }) {  // Added setOffset here
+  
+  const handleForward = () => {
+    setOffset(prevOffset => prevOffset + 10);  // Increment offset
+  }
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = results.slice(indexOfFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  const handleBack = () => {
+    setOffset(prevOffset => Math.max(prevOffset - 10, 0));  // Decrement offset
+  }
+  
   return (
     <div className="SearchResults">
       <h2>Search Results:</h2>
       <ul>
-        {currentItems.map((result, index) => {
-          return (
-            <Track track={result} key={index} onAdd={onAdd} />  // onAdd is passed down here
-          );
-        })}
+        {results[0].map((result, index) => (
+          <Track track={result} key={index} onAdd={onAdd} onNewSearch={onNewSearch} type={results[1]} />
+        ))}
       </ul>
       <div className="pagination-buttons">
-        <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>Back</button>
-        <button onClick={() => paginate(currentPage + 1)} disabled={currentPage * itemsPerPage >= results.length}>Forward</button>
+        <button onClick={handleBack} disabled={offset === 0}>Back</button>
+        <button onClick={handleForward}>Forward</button>
       </div>
     </div>
   );
