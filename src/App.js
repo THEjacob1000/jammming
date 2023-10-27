@@ -8,6 +8,7 @@ import SearchResults from './modules/SearchResults';
 import Playlist from './modules/Playlist';
 import { authorize, handleAuthorization, handleSearch as SpotifyHandleSearch, idSearch as SpotifyIdSearch, createPlaylist, isTokenExpired } from './modules/Spotify';
 
+
 function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTracks, setSelectedTracks] = useState([]);
@@ -18,7 +19,8 @@ function App() {
   const [lastSearchType, setLastSearchType] = useState('');
 
   const client_id = "c9d7d7dc40aa430e8b27d120f0301c16";
-  const redirect_uri = "https://jammming-jacob.netlify.app";
+  const redirect_uri = process.env.REACT_APP_REDIRECT_URI;
+  console.log(redirect_uri);
 
   useEffect(() => {
     const savedState = localStorage.getItem('spotify_auth_state');
