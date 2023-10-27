@@ -14,7 +14,12 @@ export const authorize = (client_id, redirect_uri) => {
     const scope = 'playlist-modify-public playlist-modify-private'; // Add scopes here
     const url = `https://accounts.spotify.com/authorize?response_type=token&client_id=${client_id}&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(redirect_uri)}&state=${encodeURIComponent(state)}`;
     window.location.href = url;
-  };
+};
+
+export const isTokenExpired = () => {
+    const expiryTime = localStorage.getItem('spotify_token_expiry');
+    return new Date().getTime() > expiryTime;
+};
 
 export const handleAuthorization = (savedState, setAccessToken, setLoggedIn) => {
     const hash = window.location.hash
@@ -27,6 +32,9 @@ export const handleAuthorization = (savedState, setAccessToken, setLoggedIn) => 
         }, {});
 
     if (hash.access_token && hash.expires_in) {
+        const expiresIn = parseInt(hash.expires_in);
+        const expiryTime = new Date().getTime() + expiresIn * 1000;
+        localStorage.setItem('spotify_token_expiry', expiryTime);
         setAccessToken(hash.access_token);
         setLoggedIn(true);
     }
@@ -64,7 +72,8 @@ export const handleSearch = async (search, searchType, accessToken, offset) => {
                     album: result[i].album.name,
                     artist: artists,
                     songId: result[i].id,
-                    img: result[i].album.images[2].url
+                    img: result[i].album.images[2].url,
+                    preview: result[i].preview_url
                 });
             }
         } else if (searchType === 'artist') {
@@ -119,7 +128,8 @@ export const idSearch = async (id, searchType, accessToken, offset) => {
                         album: result[i].album.name,
                         artist: artists,
                         songId: result[i].id,
-                        img: result[i].album.images[2].url
+                        img: result[i].album.images[2].url,
+                        preview: result[i].preview_url
                     });
                 }
             }
@@ -142,7 +152,8 @@ export const idSearch = async (id, searchType, accessToken, offset) => {
                         album: result[i].album.name,
                         artist: artists,
                         songId: result[i].id,
-                        img: result[i].album.images[2].url
+                        img: result[i].album.images[2].url,
+                        preview: result[i].preview_url
                     });
                 }
             }

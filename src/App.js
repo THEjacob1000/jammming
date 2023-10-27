@@ -6,7 +6,7 @@ import './styles.css';
 import SearchBar from './modules/SearchBar';
 import SearchResults from './modules/SearchResults';
 import Playlist from './modules/Playlist';
-import { authorize, handleAuthorization, handleSearch as SpotifyHandleSearch, idSearch as SpotifyIdSearch, createPlaylist } from './modules/Spotify';
+import { authorize, handleAuthorization, handleSearch as SpotifyHandleSearch, idSearch as SpotifyIdSearch, createPlaylist, isTokenExpired } from './modules/Spotify';
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
@@ -31,12 +31,18 @@ function App() {
     authorize(client_id, redirect_uri);
   };
   const handleSearch = async (searchTerm, searchType) => {
+    if (isTokenExpired()) {
+      logIntoSpotify();
+    }
     setLastSearchTerm(searchTerm);
     setLastSearchType(searchType);
     const newResults = await SpotifyHandleSearch(searchTerm, searchType, accessToken, offset);
     setSearchResults(newResults);
   };
   const handleNewSearch = async (searchType, id) => {
+    if (isTokenExpired()) {
+      logIntoSpotify();
+    }
     const newResults = await SpotifyIdSearch(id, searchType, accessToken, offset);
     setSearchResults(newResults);
   };
@@ -50,6 +56,9 @@ function App() {
     setSelectedTracks(newSelectedTracks);
   };
   const createNewPlaylist = async (name) => {
+    if (isTokenExpired()) {
+      logIntoSpotify();
+    }
     const playlist = await createPlaylist(name, selectedTracks, accessToken);
     console.log(playlist);
   }
@@ -57,14 +66,23 @@ function App() {
   useEffect(() => {
     console.log("searchResults updated:", searchResults);
   }, [searchResults]);
-  
   useEffect(() => {
     if (lastSearchTerm && lastSearchType) {
       handleSearch(lastSearchTerm, lastSearchType);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset]);
-  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isTokenExpired()) {
+        setLoggedIn(false);
+        setAccessToken('');
+      }
+    }, 1000); // Check every second
+
+    return () => clearInterval(interval); // Cleanup when component unmounts
+  }, []);
+
 
   return (
     <div className="App">
@@ -77,7 +95,7 @@ function App() {
           <SearchBar onSearch={handleSearch} access={accessToken} />
           <div className="content">
             {searchResults.length > 0 && (
-              <SearchResults results={searchResults} onAdd={onAdd} onNewSearch={handleNewSearch} offset={offset} setOffset={setOffset} />  // Passed setOffset here
+              <SearchResults results={searchResults} onAdd={onAdd} onNewSearch={handleNewSearch} offset={offset} setOffset={setOffset} selectedTracks={selectedTracks} />  // Passed setOffset here
             )}
             <Playlist selectedTracks={selectedTracks} onRemove={onRemove} createPlaylist={createNewPlaylist} />
           </div>

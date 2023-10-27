@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './Playlist.css';
-import '../styles.css';
 
 function Playlist({ selectedTracks, onRemove, createPlaylist }) {
   const [playlistName, setPlaylistName] = useState('New Playlist');
@@ -17,23 +16,25 @@ function Playlist({ selectedTracks, onRemove, createPlaylist }) {
   return (
     <div className="Playlist">
       <h2 data-testid="playlist-header">Playlist</h2>
-      <input 
-        type="text" 
-        value={playlistName} 
+      <input
+        type="text"
+        value={playlistName}
         onChange={handleNameChange}
         placeholder="Enter Playlist Name"
       />
       <ul>
         {selectedTracks.map((track, index) => (
           <li key={index} className="playlist-track">
-            Song: {track.name}<br />
-            Artist: {track.artist}<br />
-            Album: {track.album}
+            <img src={track.img} alt="Album Cover" />
+            <div className="playlist-track-details">
+              <span className="track-name-large">{track.name}</span><br />
+              <span className="track-artist-medium">{track.artist}</span>
+            </div>
             <button className="reusable-button" onClick={() => onRemove(track)}>Remove</button>
           </li>
         ))}
       </ul>
-      <button className="reusable-button" onClick={handleCompleteClick}>
+      <button className="complete-button" onClick={handleCompleteClick}>
         Complete Playlist
       </button>
     </div>

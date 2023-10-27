@@ -30,15 +30,48 @@
 }
 
 .complete-button {
-    background-color: #444;
+    background-color: #1db954;
     color: white;
-    padding: 10px 20px;
+    padding: 20px 50px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     margin-top: 10px;
+    width: auto;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .complete-button:hover {
-    background-color: #555;
+    background-color: #126b31;
+}
+
+.playlist-track {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.playlist-track img {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+    border-radius: 4px;
+}
+
+.track-name-large {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.track-artist-medium {
+    font-size: 1.2em;
+}
+
+.playlist-track-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: calc(100% - 120px);
 }
