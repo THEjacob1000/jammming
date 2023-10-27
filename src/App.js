@@ -18,7 +18,7 @@ function App() {
   const [lastSearchType, setLastSearchType] = useState('');
 
   const client_id = "c9d7d7dc40aa430e8b27d120f0301c16";
-  const redirect_uri = "http://localhost:3000";
+  const redirect_uri = "https://jammming-jacob.netlify.app/";
 
   useEffect(() => {
     const savedState = localStorage.getItem('spotify_auth_state');
