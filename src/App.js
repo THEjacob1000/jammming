@@ -19,7 +19,8 @@ function App() {
   const [lastSearchType, setLastSearchType] = useState('');
 
   const client_id = "c9d7d7dc40aa430e8b27d120f0301c16";
-  const redirect_uri = window.location.hostname === 'localhost' ? process.env.REACT_APP_REDIRECT_URI : 'https://jammming-jacob.netlify.app';
+  // const redirect_uri = window.location.hostname === 'localhost' ? process.env.REACT_APP_REDIRECT_URI : 'https://jammming-jacob.netlify.app';
+  const redirect_uri = process.env.REACT_APP_REDIRECT_URI
   console.log(redirect_uri);
 
   useEffect(() => {
